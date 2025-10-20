@@ -67,7 +67,8 @@ export default {
             if (this.element.props.columns && this.element.props.columns.length > 0) {
                 columns = this.element.props.columns.map((col) => col.label)
             } else {
-                let data = this.parseData(this.element.props.data)
+                Logger.error('qTable.columns() no columns defined, try to parse from data')
+                const data = this.parseData(this.element.props.data)
                 columns = data[0]
             }
             let offset = 0
@@ -135,9 +136,9 @@ export default {
         let dataBindingInput = this.dataBindingInput
         if (dataBindingInput && Array.isArray(dataBindingInput)) {
             if (this.element && this.element.props &&  this.element.props.columns && this.element.props.columns.length > 0) {
-                let cols = this.element.props.columns
+                const cols = this.element.props.columns
                 return dataBindingInput.map((row, i) => {
-                    let values = cols.map(col => {
+                    const values = cols.map(col => {
                         if (row[col.databinding] !== undefined) {
                             return row[col.databinding]
                         }
@@ -153,8 +154,8 @@ export default {
             return dataBindingInput
         } else {
             if (this.element) {
-                let data = this.parseData(this.element.props.data)
-                return data.filter((row, i) => i > 0).map((row, i) => {
+                const data = this.parseData(this.element.props.data)
+                return data.map((row, i) => {
                     return {
                         id: i,
                         values: row,
@@ -189,9 +190,7 @@ export default {
         }
     },
     onActionClick (action, row) {
-        console.debug(action)
         Logger.log(-5, 'qTable.onActionClick() enter > ' + action.label, row)
-   
         const callback = action.callback ? action.callback : action.id
         this.$emit('qCallback', this.element, {
             callback: callback,
@@ -203,7 +202,7 @@ export default {
         if (pos < 0) {
             this.selected.push(row.id)
         } else {
-            this.$delete(this.selected, pos)
+            this.selected.splice(pos, 1)
         }
         let databinding = this.dataBinding
         if (databinding.output) {
@@ -219,12 +218,13 @@ export default {
        * for now assume csv
        */
       if (data.substring) {
-        var table = [];
-        var lines = data.split("\n");
+        const table = [];
+        const lines = data.split("\n");
         for (let i = 0; i < lines.length; i++) {
-          let line = lines[i];
+          const line = lines[i];
           table.push(line.split(","));
         }
+        console.debug('parseData(): ', table)
         return table;
       } else {
         return data;

@@ -152,7 +152,7 @@ export default {
         if (pos < 0) {
             this.selected.push(row.id)
         } else {
-            this.$delete(this.selected, pos)
+            this.selected.splice(pos, 1)
         }
     },
     isRowSelected (row) {

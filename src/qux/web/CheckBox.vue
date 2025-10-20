@@ -1,5 +1,5 @@
 <template>
-  <div :class="['qux-checkbox', cssClass, {'qux-checkbox-checked': isChecked}]" @click="toggle">
+  <div :class="['qux-checkbox', cssClass, {'qux-checkbox-checked': isChecked}]" @click.stop="toggle">
 		<div class="qux-checkbox-cntr">
 			<span class="qux-checkbox-hook">
 			</span>
